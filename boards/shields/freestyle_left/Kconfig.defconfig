@@ -1,0 +1,6 @@
+if SHIELD_FREESTYLE_LEFT
+
+config ZMK_KEYBOARD_NAME
+    default "Freestyle Left"
+
+endif
