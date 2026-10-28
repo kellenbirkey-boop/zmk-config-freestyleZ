@@ -4,7 +4,7 @@
 / {
     kscan0: kscan0 {
         compatible = "zmk,kscan-gpio-matrix";
-        diode-direction = "col2row";
+        diode-direction = "row2col";
         wakeup-source;
 
         /*
@@ -15,23 +15,27 @@
          *                          inner P21, thumbs P15 / P14 / P16
          * Rows (diode pad 1):      bottom P2, home P3, top P4, upper P5,
          *                          thumb row P1
+         *
+         * row2col: use this when the diode stripes (cathodes) face the
+         * switch/column side. For stripes on the row side, use col2row with
+         * the pull-downs on the rows instead.
          */
         col-gpios =
-            <&pro_micro 7  GPIO_ACTIVE_HIGH>,   /* col 0: pinky  */
-            <&pro_micro 18 GPIO_ACTIVE_HIGH>,   /* col 1: ring   */
-            <&pro_micro 19 GPIO_ACTIVE_HIGH>,   /* col 2: middle */
-            <&pro_micro 20 GPIO_ACTIVE_HIGH>,   /* col 3: index  */
-            <&pro_micro 21 GPIO_ACTIVE_HIGH>,   /* col 4: inner  */
-            <&pro_micro 15 GPIO_ACTIVE_HIGH>,   /* col 5: thumb 1 (left)   */
-            <&pro_micro 14 GPIO_ACTIVE_HIGH>,   /* col 6: thumb 2 (middle) */
-            <&pro_micro 16 GPIO_ACTIVE_HIGH>;   /* col 7: thumb 3 (right)  */
+            <&pro_micro 7  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* col 0: pinky  */
+            <&pro_micro 18 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* col 1: ring   */
+            <&pro_micro 19 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* col 2: middle */
+            <&pro_micro 20 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* col 3: index  */
+            <&pro_micro 21 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* col 4: inner  */
+            <&pro_micro 15 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* col 5: thumb 1 (left)   */
+            <&pro_micro 14 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* col 6: thumb 2 (middle) */
+            <&pro_micro 16 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;   /* col 7: thumb 3 (right)  */
 
         row-gpios =
-            <&pro_micro 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* row 0: bottom */
-            <&pro_micro 3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* row 1: home   */
-            <&pro_micro 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* row 2: top    */
-            <&pro_micro 5 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* row 3: upper  */
-            <&pro_micro 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;   /* row 4: thumbs */
+            <&pro_micro 2 GPIO_ACTIVE_HIGH>,   /* row 0: bottom */
+            <&pro_micro 3 GPIO_ACTIVE_HIGH>,   /* row 1: home   */
+            <&pro_micro 4 GPIO_ACTIVE_HIGH>,   /* row 2: top    */
+            <&pro_micro 5 GPIO_ACTIVE_HIGH>,   /* row 3: upper  */
+            <&pro_micro 1 GPIO_ACTIVE_HIGH>;   /* row 4: thumbs */
     };
 
     default_transform: keymap_transform {
