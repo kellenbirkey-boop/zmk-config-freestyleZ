@@ -7,9 +7,19 @@
         diode-direction = "col2row";
         wakeup-source;
 
+        /*
+         * Every pin below is written as &pro_micro <number>, using the number
+         * printed next to the pad on the Nice!nano. Each number must appear
+         * only ONCE across the columns and rows.
+         *
+         * The two lines marked "CHANGE ME" were duplicates in the old file.
+         * Set each one to the pad number that wire is actually soldered to.
+         * Valid numbers: 0-10, 14, 15, 16, 18, 19, 20, 21
+         * Already used (don't reuse): 5, 6, 7, 8, 10, 14, 15, 16, 18, 19, 20
+         */
         col-gpios =
             <&pro_micro 10 GPIO_ACTIVE_HIGH>,
-            <&gpio1 15 GPIO_ACTIVE_HIGH>,
+            <&pro_micro 21 GPIO_ACTIVE_HIGH>,   /* CHANGE ME: column 2 (old file had a duplicate here) */
             <&pro_micro 18 GPIO_ACTIVE_HIGH>,
             <&pro_micro 19 GPIO_ACTIVE_HIGH>,
             <&pro_micro 20 GPIO_ACTIVE_HIGH>,
@@ -22,7 +32,7 @@
             <&pro_micro 6 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,
             <&pro_micro 7 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,
             <&pro_micro 8 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,
-            <&gpio1 0 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
+            <&pro_micro 9 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;   /* CHANGE ME: row 5 (old file had a duplicate here) */
     };
 
     default_transform: keymap_transform {
