@@ -1,41 +1,46 @@
 #include <dt-bindings/zmk/matrix_transform.h>
+#include <physical_layouts.dtsi>
 #include <zephyr/dt-bindings/gpio/gpio.h>
 
 / {
+    chosen {
+        zmk,physical-layout = &default_layout;
+    };
+
     kscan0: kscan0 {
         compatible = "zmk,kscan-gpio-matrix";
-        diode-direction = "row2col";
+        diode-direction = "col2row";
         wakeup-source;
 
         /*
-         * Pins taken directly from Freestyle_L.kicad_pcb (net names P1, P2, ...
-         * match the &pro_micro numbers).
+         * Pins taken from Freestyle_L.kicad_pcb (net names P1, P2, ... match
+         * the &pro_micro numbers).
          *
          * Columns (switch pin 1):  pinky P7, ring P18, middle P19, index P20,
          *                          inner P21, thumbs P15 / P14 / P16
          * Rows (diode pad 1):      bottom P2, home P3, top P4, upper P5,
          *                          thumb row P1
          *
-         * row2col: use this when the diode stripes (cathodes) face the
-         * switch/column side. For stripes on the row side, use col2row with
-         * the pull-downs on the rows instead.
+         * col2row matches the diode symbol printed on the PCB: the stripe
+         * (cathode) goes on the end connected to the row line, away from
+         * the switch.
          */
         col-gpios =
-            <&pro_micro 7  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* col 0: pinky  */
-            <&pro_micro 18 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* col 1: ring   */
-            <&pro_micro 19 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* col 2: middle */
-            <&pro_micro 20 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* col 3: index  */
-            <&pro_micro 21 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* col 4: inner  */
-            <&pro_micro 15 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* col 5: thumb 1 (left)   */
-            <&pro_micro 14 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* col 6: thumb 2 (middle) */
-            <&pro_micro 16 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;   /* col 7: thumb 3 (right)  */
+            <&pro_micro 7  GPIO_ACTIVE_HIGH>,   /* col 0: pinky  */
+            <&pro_micro 18 GPIO_ACTIVE_HIGH>,   /* col 1: ring   */
+            <&pro_micro 19 GPIO_ACTIVE_HIGH>,   /* col 2: middle */
+            <&pro_micro 20 GPIO_ACTIVE_HIGH>,   /* col 3: index  */
+            <&pro_micro 21 GPIO_ACTIVE_HIGH>,   /* col 4: inner  */
+            <&pro_micro 15 GPIO_ACTIVE_HIGH>,   /* col 5: thumb 1 (left)   */
+            <&pro_micro 14 GPIO_ACTIVE_HIGH>,   /* col 6: thumb 2 (middle) */
+            <&pro_micro 16 GPIO_ACTIVE_HIGH>;   /* col 7: thumb 3 (right)  */
 
         row-gpios =
-            <&pro_micro 2 GPIO_ACTIVE_HIGH>,   /* row 0: bottom */
-            <&pro_micro 3 GPIO_ACTIVE_HIGH>,   /* row 1: home   */
-            <&pro_micro 4 GPIO_ACTIVE_HIGH>,   /* row 2: top    */
-            <&pro_micro 5 GPIO_ACTIVE_HIGH>,   /* row 3: upper  */
-            <&pro_micro 1 GPIO_ACTIVE_HIGH>;   /* row 4: thumbs */
+            <&pro_micro 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* row 0: bottom */
+            <&pro_micro 3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* row 1: home   */
+            <&pro_micro 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* row 2: top    */
+            <&pro_micro 5 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,   /* row 3: upper  */
+            <&pro_micro 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;   /* row 4: thumbs */
     };
 
     default_transform: keymap_transform {
@@ -53,8 +58,39 @@
         >;
     };
 
-    chosen {
-        zmk,kscan = &kscan0;
-        zmk,matrix-transform = &default_transform;
+    /* Physical key positions for ZMK Studio, in the same order as the map
+       above (units: 1/100 of a key; w h x y rot rx ry). Positions come from
+       the switch coordinates in the PCB file. */
+    default_layout: default_layout {
+        compatible = "zmk,physical-layout";
+        display-name = "Freestyle Left";
+        transform = <&default_transform>;
+        kscan = <&kscan0>;
+
+        keys  // w   h    x    y   rot   rx   ry
+            = <&key_physical_attrs 100 100    0   42     0   50   92>   /* S4 */
+            , <&key_physical_attrs 100 100  100   21     0  150   71>   /* S8 */
+            , <&key_physical_attrs 100 100  199    0     0  249   50>   /* S12 */
+            , <&key_physical_attrs 100 100  299   21     0  349   71>   /* S16 */
+            , <&key_physical_attrs 100 100  399    0     0  449   50>   /* S20 */
+            , <&key_physical_attrs 100 100    0  142     0   50  192>   /* S3 */
+            , <&key_physical_attrs 100 100  100  121     0  150  171>   /* S7 */
+            , <&key_physical_attrs 100 100  199  100     0  249  150>   /* S11 */
+            , <&key_physical_attrs 100 100  299  121     0  349  171>   /* S15 */
+            , <&key_physical_attrs 100 100  399  100     0  449  150>   /* S19 */
+            , <&key_physical_attrs 100 100    0  242     0   50  292>   /* S2 */
+            , <&key_physical_attrs 100 100  100  221     0  150  271>   /* S6 */
+            , <&key_physical_attrs 100 100  199  200     0  249  250>   /* S10 */
+            , <&key_physical_attrs 100 100  299  221     0  349  271>   /* S14 */
+            , <&key_physical_attrs 100 100  399  200     0  449  250>   /* S18 */
+            , <&key_physical_attrs 100 100    0  342     0   50  392>   /* S1 */
+            , <&key_physical_attrs 100 100  100  321     0  150  371>   /* S5 */
+            , <&key_physical_attrs 100 100  199  300     0  249  350>   /* S9 */
+            , <&key_physical_attrs 100 100  299  321     0  349  371>   /* S13 */
+            , <&key_physical_attrs 100 100  399  300     0  449  350>   /* S17 */
+            , <&key_physical_attrs 100 100  365  446  1000  415  496>   /* S21 */
+            , <&key_physical_attrs 100 100  467  469  1500  517  519>   /* S22 */
+            , <&key_physical_attrs 100 100  566  500  2000  616  550>   /* S23 */
+        ;
     };
 };
